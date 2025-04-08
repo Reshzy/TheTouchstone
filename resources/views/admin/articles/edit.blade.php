@@ -89,7 +89,7 @@
             <input type="datetime-local" name="published_at" id="published_at"
                 value="{{ old('published_at', $article->published_at ? $article->published_at->format('Y-m-d\TH:i') : '') }}"
                 class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-            <p class="text-xs text-gray-500 mt-1">When to publish the article. Leave blank for immediate publication.</p>
+            <p class="text-xs text-gray-500 mt-1">When to publish the article. Current date/time will be used if left empty.</p>
         </div>
 
         <div class="flex justify-end mt-6">

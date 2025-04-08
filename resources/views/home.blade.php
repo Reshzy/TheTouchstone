@@ -107,7 +107,7 @@
             <div class="bg-white p-4 rounded-lg shadow-sm">
                 <h3 class="text-lg font-semibold mb-4 text-gray-900">About</h3>
                 <p class="text-sm text-gray-700 mb-4">
-                    The Touchstone is Cagayan State University's premier source for news, information and campus happenings. Stay informed with our latest articles and updates.
+                    The Touchstone is Cagayan State University - Sanchez Mira's premier source for news, information and campus happenings. Stay informed with our latest articles and updates.
                 </p>
                 @guest
                 <div class="border-t pt-4">

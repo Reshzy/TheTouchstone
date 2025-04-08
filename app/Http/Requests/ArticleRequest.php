@@ -29,13 +29,21 @@ class ArticleRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'status' => 'required|in:draft,pending,published',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'published_at' => 'nullable|date',
         ];
 
-        // If publishing, require a published_at date
-        if ($this->input('status') === 'published') {
-            $rules['published_at'] = 'required|date';
-        }
-
         return $rules;
+    }
+    
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->input('status') === 'published' && !$this->filled('published_at')) {
+            $this->merge([
+                'published_at' => now(),
+            ]);
+        }
     }
 }
