@@ -24,7 +24,11 @@ Route::get('/logout-test', function() {
 });
 
 Route::get('/dashboard', function () {
-    return redirect()->route('admin.dashboard');
+    if (Auth::check() && Auth::user()->is_admin) {
+        return redirect()->route('admin.dashboard');
+    } else {
+        return redirect()->route('home');
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
