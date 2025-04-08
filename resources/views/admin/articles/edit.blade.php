@@ -5,9 +5,14 @@
 @section('content')
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-semibold text-gray-900">Edit Article</h1>
-    <a href="{{ route('admin.articles.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-        Back to Articles
-    </a>
+    <div class="flex space-x-2">
+        <a href="{{ route('admin.articles.contributors.index', $article) }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Manage Contributors
+        </a>
+        <a href="{{ route('admin.articles.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+            Back to Articles
+        </a>
+    </div>
 </div>
 
 @if($errors->any())

@@ -84,6 +84,19 @@
             <p class="text-xs text-gray-500 mt-1">When to publish the article. Current date/time will be used if left empty.</p>
         </div>
 
+        <div class="mb-4">
+            <div class="flex items-start">
+                <div class="flex items-center h-5">
+                    <input id="manage_contributors" name="manage_contributors" type="checkbox" value="1" {{ old('manage_contributors') ? 'checked' : '' }}
+                        class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                </div>
+                <div class="ml-3 text-sm">
+                    <label for="manage_contributors" class="font-medium text-gray-700">Manage contributors after creation</label>
+                    <p class="text-gray-500">Check this to add contributors (photographers, illustrators, etc.) immediately after creating the article.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="flex justify-end mt-6">
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Create Article

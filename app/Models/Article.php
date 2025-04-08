@@ -41,6 +41,17 @@ class Article extends Model
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * Get the contributors for the article.
+     */
+    public function contributors()
+    {
+        return $this->belongsToMany(Contributor::class)
+                    ->withPivot('role', 'display_order')
+                    ->withTimestamps()
+                    ->orderBy('display_order');
+    }
+
     // Auto-generate slug from title
     protected static function boot()
     {

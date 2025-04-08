@@ -61,7 +61,13 @@ class ArticleController extends Controller
         // Debug statement to check what's in $data
         \Illuminate\Support\Facades\Log::info('Article data before create:', $data);
         
-        Article::create($data);
+        $article = Article::create($data);
+        
+        // Check if we should redirect to the contributors page
+        if ($request->has('manage_contributors')) {
+            return redirect()->route('admin.articles.contributors.index', $article)
+                ->with('success', 'Article created successfully. You can now add contributors.');
+        }
         
         return redirect()->route('admin.articles.index')
             ->with('success', 'Article created successfully.');

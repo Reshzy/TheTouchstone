@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Admin\ArticleContributorController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContributorController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ArticleController;
@@ -46,6 +48,17 @@ Route::prefix('admin')
         Route::resource('articles', AdminArticleController::class)->names('admin.articles');
         Route::resource('categories', CategoryController::class)->names('admin.categories');
         Route::resource('users', UserController::class)->names('admin.users');
+        Route::resource('contributors', ContributorController::class)->names('admin.contributors');
+        
+        // Article Contributors routes
+        Route::get('articles/{article}/contributors', [ArticleContributorController::class, 'index'])
+            ->name('admin.articles.contributors.index');
+        Route::post('articles/{article}/contributors', [ArticleContributorController::class, 'store'])
+            ->name('admin.articles.contributors.store');
+        Route::put('articles/{article}/contributors/{contributor}', [ArticleContributorController::class, 'update'])
+            ->name('admin.articles.contributors.update');
+        Route::delete('articles/{article}/contributors/{contributor}', [ArticleContributorController::class, 'destroy'])
+            ->name('admin.articles.contributors.destroy');
     });
 
 require __DIR__.'/auth.php';
