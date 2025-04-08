@@ -21,19 +21,21 @@
                             </a>
                         @endif
                         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{{ $article->title }}</h1>
-                        <div class="flex items-center text-sm text-gray-500 mb-4">
-                            <span>{{ $article->published_at->format('M d, Y') }}</span>
-                            <span class="mx-2">•</span>
-                            <span>By {{ $article->author->name }}</span>
+                        <div class="flex justify-between items-center text-sm text-gray-500 mb-4">
+                            <div class="flex items-center">
+                                <span>{{ $article->published_at->format('M d, Y') }}</span>
+                                <span class="mx-2">•</span>
+                                <span>By {{ $article->author->name }}</span>
+                            </div>
                             
                             @if($article->contributors->count() > 0)
-                                <div class="mt-2 text-sm text-gray-600">
+                                <div class="text-left text-sm text-gray-600">
                                     @php
                                         $contributorsByRole = $article->contributors->groupBy('pivot.role');
                                     @endphp
                                     
                                     @foreach($contributorsByRole as $role => $contributors)
-                                        <div class="flex items-center mt-1">
+                                        <div class="flex items-center justify-start mt-1">
                                             <span class="font-medium">{{ $role }}:</span>
                                             <span class="ml-1">
                                                 {{ $contributors->pluck('name')->implode(', ') }}
