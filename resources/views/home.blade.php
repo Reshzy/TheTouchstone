@@ -18,7 +18,7 @@
     <!-- Hero Section with Featured Articles -->
     <section class="mb-12">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            @foreach($featuredArticles->take(3) as $index => $article)
+            @foreach($featuredArticles->take(5) as $index => $article)
             @if($index === 0)
             <div class="lg:col-span-2 relative rounded-lg overflow-hidden shadow-lg h-96">
                 @if($article->featured_image)
