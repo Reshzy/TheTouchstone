@@ -21,6 +21,7 @@
         <!-- Sidebar -->
         <div class="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white">
             <div class="flex items-center justify-center h-16 bg-gray-900">
+                <img src="{{ asset('images/Touchstone_Logo.png') }}" alt="Touchstone Logo" class="h-8 w-auto mr-2">
                 <span class="text-xl font-bold">The Touchstone</span>
             </div>
             <nav class="mt-5">
