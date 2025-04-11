@@ -52,6 +52,14 @@ class Article extends Model
                     ->orderBy('display_order');
     }
 
+    /**
+     * Get the additional images for the article.
+     */
+    public function images()
+    {
+        return $this->hasMany(ArticleImage::class)->orderBy('display_order');
+    }
+
     // Auto-generate slug from title
     protected static function boot()
     {

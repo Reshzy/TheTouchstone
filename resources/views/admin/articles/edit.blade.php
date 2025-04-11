@@ -6,6 +6,9 @@
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-semibold text-gray-900">Edit Article</h1>
     <div class="flex space-x-2">
+        <a href="{{ route('admin.articles.images.index', $article) }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+            Manage Images
+        </a>
         <a href="{{ route('admin.articles.contributors.index', $article) }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
             Manage Contributors
         </a>
@@ -77,6 +80,24 @@
                 class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
             <p class="text-xs text-gray-500 mt-1">Upload a new image to replace the current one. Recommended size: 1200x630 pixels. Max file size: 2MB.</p>
         </div>
+        
+        <div class="mb-4">
+            <label for="additional_images" class="block text-sm font-medium text-gray-700 mb-1">Additional Images</label>
+            <input type="file" name="additional_images[]" id="additional_images" multiple
+                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+            <p class="text-xs text-gray-500 mt-1">You can select multiple images. These will be displayed as a gallery at the bottom of the article.</p>
+            
+            @if($article->images->count() > 0)
+            <div class="mt-2">
+                <p class="text-sm text-gray-700">Current additional images: {{ $article->images->count() }}</p>
+                <div class="flex space-x-2 mt-1">
+                    <a href="{{ route('admin.articles.images.index', $article) }}" class="text-blue-600 hover:text-blue-800 text-sm">
+                        Manage existing images
+                    </a>
+                </div>
+            </div>
+            @endif
+        </div>
 
         <div class="mb-4">
             <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
@@ -98,6 +119,13 @@
         </div>
 
         <div class="flex justify-end mt-6">
+            <div class="flex items-center mr-4">
+                <input id="manage_images" name="manage_images" type="checkbox" value="1" {{ old('manage_images') ? 'checked' : '' }}
+                    class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                <label for="manage_images" class="ml-2 block text-sm text-gray-900">
+                    Manage images after update
+                </label>
+            </div>
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Update Article
             </button>

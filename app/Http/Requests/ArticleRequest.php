@@ -30,6 +30,10 @@ class ArticleRequest extends FormRequest
             'status' => 'required|in:draft,pending,published',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'published_at' => 'nullable|date',
+            'additional_images' => 'nullable|array',
+            'additional_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_captions' => 'nullable|array',
+            'image_captions.*' => 'nullable|string|max:255',
         ];
 
         return $rules;

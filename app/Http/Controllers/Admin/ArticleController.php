@@ -63,10 +63,34 @@ class ArticleController extends Controller
         
         $article = Article::create($data);
         
+        // Handle additional images if provided
+        if ($request->hasFile('additional_images')) {
+            $displayOrder = 1;
+            foreach ($request->file('additional_images') as $index => $image) {
+                $imagePath = $image->store('article_images', 'public');
+                
+                // Get caption if available
+                $caption = $request->input('image_captions.' . $index, null);
+                
+                // Create the image record
+                $article->images()->create([
+                    'image_path' => $imagePath,
+                    'caption' => $caption,
+                    'display_order' => $displayOrder++,
+                ]);
+            }
+        }
+        
         // Check if we should redirect to the contributors page
         if ($request->has('manage_contributors')) {
             return redirect()->route('admin.articles.contributors.index', $article)
                 ->with('success', 'Article created successfully. You can now add contributors.');
+        }
+        
+        // Check if we should redirect to the images page
+        if ($request->has('manage_images')) {
+            return redirect()->route('admin.articles.images.index', $article)
+                ->with('success', 'Article created successfully. You can now manage additional images.');
         }
         
         return redirect()->route('admin.articles.index')
@@ -121,6 +145,31 @@ class ArticleController extends Controller
         
         $article->update($data);
         
+        // Handle additional images if provided
+        if ($request->hasFile('additional_images')) {
+            $displayOrder = $article->images()->max('display_order') + 1 ?? 1;
+            
+            foreach ($request->file('additional_images') as $index => $image) {
+                $imagePath = $image->store('article_images', 'public');
+                
+                // Get caption if available
+                $caption = $request->input('image_captions.' . $index, null);
+                
+                // Create the image record
+                $article->images()->create([
+                    'image_path' => $imagePath,
+                    'caption' => $caption,
+                    'display_order' => $displayOrder++,
+                ]);
+            }
+            
+            // Redirect to images page if requested
+            if ($request->has('manage_images')) {
+                return redirect()->route('admin.articles.images.index', $article)
+                    ->with('success', 'Article updated successfully. You can now manage additional images.');
+            }
+        }
+        
         return redirect()->route('admin.articles.index')
             ->with('success', 'Article updated successfully.');
     }
@@ -133,6 +182,11 @@ class ArticleController extends Controller
         // Delete featured image if exists
         if ($article->featured_image) {
             Storage::disk('public')->delete($article->featured_image);
+        }
+        
+        // Delete all additional images
+        foreach($article->images as $image) {
+            Storage::disk('public')->delete($image->image_path);
         }
         
         $article->delete();

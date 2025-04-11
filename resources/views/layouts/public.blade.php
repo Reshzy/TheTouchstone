@@ -21,6 +21,7 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center">
+                        <img src="{{ asset('images/Touchstone_Logo.png') }}" alt="Touchstone Logo" class="h-12 w-auto mr-2">
                         <h1 class="text-2xl font-bold text-gray-900">The Touchstone</h1>
                     </a>
                 </div>
@@ -32,7 +33,7 @@
                             <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Admin</a>
                         @endif
                         <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Profile</a>
-                        <form method="POST" action="{{ route('logout') }}" class="inline-block">
+                        <form method="POST" action="{{ route('logout') }}" class="inline-flex items-center justify-center m-auto">
                             @csrf
                             <button type="submit" class="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Logout</button>
                         </form>

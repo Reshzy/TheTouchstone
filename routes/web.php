@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\ArticleContributorController;
+use App\Http\Controllers\Admin\ArticleImageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContributorController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -59,6 +60,18 @@ Route::prefix('admin')
             ->name('admin.articles.contributors.update');
         Route::delete('articles/{article}/contributors/{contributor}', [ArticleContributorController::class, 'destroy'])
             ->name('admin.articles.contributors.destroy');
+            
+        // Article Images routes
+        Route::get('articles/{article}/images', [ArticleImageController::class, 'index'])
+            ->name('admin.articles.images.index');
+        Route::post('articles/{article}/images', [ArticleImageController::class, 'store'])
+            ->name('admin.articles.images.store');
+        Route::post('articles/{article}/images/multiple', [ArticleImageController::class, 'uploadMultiple'])
+            ->name('admin.articles.images.uploadMultiple');
+        Route::put('articles/{article}/images/{image}', [ArticleImageController::class, 'update'])
+            ->name('admin.articles.images.update');
+        Route::delete('articles/{article}/images/{image}', [ArticleImageController::class, 'destroy'])
+            ->name('admin.articles.images.destroy');
     });
 
 require __DIR__.'/auth.php';

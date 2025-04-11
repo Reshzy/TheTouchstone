@@ -67,6 +67,13 @@
         </div>
 
         <div class="mb-4">
+            <label for="additional_images" class="block text-sm font-medium text-gray-700 mb-1">Additional Images</label>
+            <input type="file" name="additional_images[]" id="additional_images" multiple
+                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+            <p class="text-xs text-gray-500 mt-1">You can select multiple images. These will be displayed as a gallery at the bottom of the article.</p>
+        </div>
+
+        <div class="mb-4">
             <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
             <select name="status" id="status"
                 class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
@@ -93,6 +100,19 @@
                 <div class="ml-3 text-sm">
                     <label for="manage_contributors" class="font-medium text-gray-700">Manage contributors after creation</label>
                     <p class="text-gray-500">Check this to add contributors (photographers, illustrators, etc.) immediately after creating the article.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="flex items-start">
+                <div class="flex items-center h-5">
+                    <input id="manage_images" name="manage_images" type="checkbox" value="1" {{ old('manage_images') ? 'checked' : '' }}
+                        class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                </div>
+                <div class="ml-3 text-sm">
+                    <label for="manage_images" class="font-medium text-gray-700">Manage images after creation</label>
+                    <p class="text-gray-500">Check this to add and organize additional images immediately after creating the article.</p>
                 </div>
             </div>
         </div>

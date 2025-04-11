@@ -57,6 +57,28 @@
                         {!! nl2br(e($article->content)) !!}
                     </div>
                     
+                    @if($article->images->count() > 0)
+                    <div class="mt-8 pt-8 border-t">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Gallery</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            @foreach($article->images->sortBy('display_order') as $index => $image)
+                            <div class="relative aspect-square overflow-hidden rounded-lg cursor-pointer gallery-image"
+                                data-index="{{ $index }}">
+                                <img src="{{ asset('storage/' . $image->image_path) }}" 
+                                    alt="{{ $image->caption }}" 
+                                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                                
+                                @if($image->caption)
+                                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-xs p-2 truncate">
+                                    {{ $image->caption }}
+                                </div>
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                    
                     <div class="mt-8 pt-6 border-t">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
@@ -128,4 +150,104 @@
             </div>
         </div>
     </div>
-@endsection 
+@endsection
+
+@if($article->images->count() > 0)
+<!-- Image Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 hidden">
+    <button id="closeModal" class="absolute top-4 right-4 text-white hover:text-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
+    
+    <button id="prevImage" class="absolute left-4 text-white hover:text-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+    </button>
+    
+    <button id="nextImage" class="absolute right-4 text-white hover:text-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </button>
+    
+    <div class="max-w-5xl max-h-full overflow-auto p-4">
+        <img id="modalImage" class="mx-auto max-h-[80vh] object-contain" src="" alt="">
+        <div id="modalCaption" class="text-white text-center mt-2 text-lg"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+        const closeModal = document.getElementById('closeModal');
+        const prevImage = document.getElementById('prevImage');
+        const nextImage = document.getElementById('nextImage');
+        const galleryImages = document.querySelectorAll('.gallery-image');
+        
+        // Store image data for modal
+        const images = JSON.parse(`[
+            @foreach($article->images->sortBy('display_order') as $image)
+            {
+                "src": "{{ asset('storage/' . $image->image_path) }}",
+                "caption": "{{ $image->caption }}"
+            }{{ !$loop->last ? ',' : '' }}
+            @endforeach
+        ]`);
+        
+        let currentIndex = 0;
+        
+        // Open modal when clicking on a gallery image
+        galleryImages.forEach(img => {
+            img.addEventListener('click', function() {
+                currentIndex = parseInt(this.dataset.index);
+                updateModalImage();
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // Close modal
+        closeModal.addEventListener('click', function() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+        
+        // Previous image
+        prevImage.addEventListener('click', function() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateModalImage();
+        });
+        
+        // Next image
+        nextImage.addEventListener('click', function() {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateModalImage();
+        });
+        
+        // Update modal image and caption
+        function updateModalImage() {
+            modalImage.src = images[currentIndex].src;
+            modalCaption.textContent = images[currentIndex].caption || '';
+        }
+        
+        // Close modal with escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            } else if (e.key === 'ArrowLeft') {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                updateModalImage();
+            } else if (e.key === 'ArrowRight') {
+                currentIndex = (currentIndex + 1) % images.length;
+                updateModalImage();
+            }
+        });
+    });
+</script>
+@endif 
