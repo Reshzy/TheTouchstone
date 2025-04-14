@@ -97,6 +97,62 @@
                 </div>
             </article>
             
+            <!-- Comments Section -->
+            <div class="mt-8 bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Comments ({{ $article->comments->count() }})</h2>
+
+                    @auth
+                        <!-- Comment form -->
+                        <div class="mb-8">
+                            <form action="{{ route('comments.store', $article) }}" method="POST" class="space-y-4">
+                                @csrf
+                                <div>
+                                    <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Leave a comment</label>
+                                    <textarea 
+                                        id="content" 
+                                        name="content" 
+                                        rows="3" 
+                                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 @error('content') border-red-500 @enderror"
+                                        placeholder="Join the discussion..."
+                                    >{{ old('content') }}</textarea>
+                                    
+                                    @error('content')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                
+                                <div class="flex justify-end">
+                                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                        Post Comment
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    @else
+                        <div class="mb-8 bg-gray-50 rounded-md p-4 text-center">
+                            <p class="text-gray-600">
+                                <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-800">Sign in</a> 
+                                to join the discussion.
+                            </p>
+                        </div>
+                    @endauth
+
+                    <!-- Comments list -->
+                    @if($article->comments->count() > 0)
+                        <div class="space-y-6">
+                            @foreach($article->comments as $comment)
+                                <x-comment :comment="$comment" :article="$article" />
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-gray-500 text-center py-8">
+                            <p>No comments yet. Be the first to share your thoughts!</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+            
             <!-- Related Articles -->
             @if($relatedArticles->count() > 0)
                 <div class="mt-8">
@@ -250,4 +306,41 @@
         });
     });
 </script>
-@endif 
+@endif
+
+<!-- Comments JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle reply forms
+        document.querySelectorAll('.reply-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentId = this.getAttribute('data-comment-id');
+                const replyForm = document.getElementById('reply-form-' + commentId);
+                
+                // Hide all other reply forms first
+                document.querySelectorAll('.reply-form').forEach(form => {
+                    if (form.id !== 'reply-form-' + commentId) {
+                        form.classList.add('hidden');
+                    }
+                });
+                
+                // Toggle this form
+                replyForm.classList.toggle('hidden');
+                
+                // Focus on textarea when form is shown
+                if (!replyForm.classList.contains('hidden')) {
+                    replyForm.querySelector('textarea').focus();
+                }
+            });
+        });
+        
+        // Cancel reply buttons
+        document.querySelectorAll('.cancel-reply').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentId = this.getAttribute('data-comment-id');
+                const replyForm = document.getElementById('reply-form-' + commentId);
+                replyForm.classList.add('hidden');
+            });
+        });
+    });
+</script> 

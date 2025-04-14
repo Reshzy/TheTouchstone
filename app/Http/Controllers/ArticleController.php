@@ -70,6 +70,17 @@ class ArticleController extends Controller
             abort(404);
         }
         
+        // Load comments with their authors and replies
+        $article->load(['comments' => function($query) {
+            $query->with('author')
+                  ->with(['replies' => function($q) {
+                      $q->with('author')->orderBy('created_at', 'asc');
+                  }])
+                  ->whereNull('parent_id')  // Only get root comments
+                  ->where('is_approved', true) // Only approved comments
+                  ->orderBy('created_at', 'desc'); // Newest first
+        }]);
+        
         // Get related articles from the same category
         $relatedArticles = Article::with('author')
             ->where('category_id', $article->category_id)
