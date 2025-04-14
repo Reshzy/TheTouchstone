@@ -1,6 +1,8 @@
 # The Touchstone - Campus Publication CMS
 
-![The Touchstone Logo](public/images/Touchstone_Logo.png)
+<div align="center">
+  <img src="public/images/Touchstone_Logo.png" alt="The Touchstone Logo">
+</div>
 
 ## Project Overview
 
