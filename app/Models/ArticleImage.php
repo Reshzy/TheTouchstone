@@ -23,4 +23,12 @@ class ArticleImage extends Model
     {
         return $this->belongsTo(Article::class);
     }
+
+    /**
+     * Get the comments for this image.
+     */
+    public function comments()
+    {
+        return $this->hasMany(ImageComment::class);
+    }
 }

@@ -75,6 +75,9 @@ class CommentController extends Controller
     {
         // Check if user is authorized to update this comment
         if (Gate::denies('update', $comment)) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+            }
             abort(403);
         }
         
@@ -85,21 +88,41 @@ class CommentController extends Controller
         $comment->content = $request->content;
         $comment->save();
 
+        // Check if this is an AJAX request
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'comment' => $comment,
+                'message' => 'Comment updated successfully'
+            ]);
+        }
+
         return redirect()->route('articles.show', $comment->article)->with('success', 'Comment updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Request $request, Comment $comment)
     {
         // Check if user is authorized to delete this comment
         if (Gate::denies('delete', $comment)) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+            }
             abort(403);
         }
         
         $article = $comment->article;
         $comment->delete();
+
+        // Check if this is an AJAX request
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Comment deleted successfully'
+            ]);
+        }
 
         return redirect()->route('articles.show', $article)->with('success', 'Comment deleted!');
     }

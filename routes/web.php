@@ -11,6 +11,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ImageCommentController;
 use App\Http\Middleware\IsAdminMiddleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     Route::post('/comments/{comment}/reply', [CommentController::class, 'reply'])->name('comments.reply');
+    
+    // Image Comment routes
+    Route::get('/article-images/{image}/comments', [ImageCommentController::class, 'getComments'])->name('image.comments.index');
+    Route::post('/article-images/{image}/comments', [ImageCommentController::class, 'store'])->name('image.comments.store');
+    Route::put('/image-comments/{comment}', [ImageCommentController::class, 'update'])->name('image.comments.update');
+    Route::delete('/image-comments/{comment}', [ImageCommentController::class, 'destroy'])->name('image.comments.destroy');
 });
 
 // Admin routes
